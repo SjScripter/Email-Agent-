@@ -17,7 +17,7 @@ export function TestEmailDialog({ payload, recipients }: { payload: any; recipie
       const res = await fetch("/api/email/test", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ testEmail, payload, recipient }),
+        body: JSON.stringify({ testEmail, payload: { ...payload, replyTo: payload.replyTo || "" }, recipient }),
       });
       const data = await res.json();
       if (res.ok) {
