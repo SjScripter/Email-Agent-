@@ -1,0 +1,8 @@
+﻿git : error: src refspec main does not match any
+At line:1 char:108
++ ... ail-Agent-.git 2>&1; echo "---"; git push -u origin main 2>&1 | Out-F ...
++                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (error: src refs...s not match any:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+error: failed to push some refs to 'https://github.com/SjScripter/Email-Agent-.git'
