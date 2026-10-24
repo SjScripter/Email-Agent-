@@ -20,10 +20,11 @@ async function handler(req: NextRequest) {
 
     const resend = getResendClient();
     const sender = getSender();
+    const fromName = payload.fromName || sender.name;
+    const fromEmail = sender.email;
 
     const results: Array<{ email: string; name: string; success: boolean; error?: string; id?: string }> = [];
 
-    // Send individually (safer than batch for varying content)
     for (let i = 0; i < recipients.length; i++) {
       const recipient = recipients[i];
       try {
@@ -35,9 +36,9 @@ async function handler(req: NextRequest) {
         const html = toHtmlEmail(bodyText, { footer: payload.footer, unsubscribeText: payload.unsubscribeText, imageDataUrl: payload.imageDataUrl });
 
         const result = await resend.emails.send({
-          from: `${payload.fromName || sender.name} <${sender.email}>`,
+          from: `${fromName} <${fromEmail}>`,
           to: recipient.email,
-          replyTo: payload.replyTo || undefined,
+          replyTo: payload.replyTo && payload.replyTo.trim() ? payload.replyTo.trim() : undefined,
           subject,
           html,
           text: bodyText,

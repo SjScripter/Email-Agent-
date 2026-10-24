@@ -3,7 +3,7 @@ import { withAuth } from "@/lib/withAuth";
 import { getResendClient, getSender } from "@/lib/resend";
 import { TestEmailSchema } from "@/lib/validationSchema";
 import { personalizeSubject, personalizeBody } from "@/lib/template";
-import { toHtmlEmail, sanitizeCustomHtml } from "@/lib/html";
+import { toHtmlEmail } from "@/lib/html";
 
 async function handler(req: NextRequest) {
   try {
@@ -19,21 +19,18 @@ async function handler(req: NextRequest) {
     if (payload.footer) bodyText += "\n\n" + payload.footer;
     if (payload.unsubscribeText) bodyText += "\n\n" + payload.unsubscribeText;
 
-    let html: string;
-    if (payload.imageDataUrl) {
-      html = toHtmlEmail(bodyText, { footer: payload.footer, unsubscribeText: payload.unsubscribeText, imageDataUrl: payload.imageDataUrl });
-    } else {
-      html = toHtmlEmail(bodyText, { footer: payload.footer, unsubscribeText: payload.unsubscribeText });
-    }
+    const html = toHtmlEmail(bodyText, { footer: payload.footer, unsubscribeText: payload.unsubscribeText, imageDataUrl: payload.imageDataUrl });
 
-    // If custom HTML is intended - but schema doesn't have mode; keep simple editor
     const resend = getResendClient();
     const sender = getSender();
 
+    const fromName = payload.fromName || sender.name;
+    const fromEmail = sender.email;
+
     const result = await resend.emails.send({
-      from: `${payload.fromName || sender.name} <${sender.email}>`,
+      from: `${fromName} <${fromEmail}>`,
       to: testEmail,
-      replyTo: payload.replyTo || undefined,
+      replyTo: payload.replyTo && payload.replyTo.trim() ? payload.replyTo.trim() : undefined,
       subject,
       html,
       text: bodyText,
