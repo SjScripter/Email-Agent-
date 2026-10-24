@@ -1,0 +1,9 @@
+﻿branch 'main' set up to track 'origin/main'.
+git : To https://github.com/SjScripter/Email-Agent-.git
+At line:1 char:127
++ ... jScripter/Email-Agent-.git 2>&1; git push -u origin main 2>&1 | Out-F ...
++                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (To https://gith...mail-Agent-.git:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ * [new branch]      main -> main
